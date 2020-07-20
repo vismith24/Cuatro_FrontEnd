@@ -18,7 +18,7 @@ export default class NavBar extends React.Component {
             }}
           >
             <img
-              src={require("../../images/crwd-logo-final.png")}
+              src={require("../../images/cuatro-logo.png")}
               style={{ height: 60 }}
             />
           </div>
