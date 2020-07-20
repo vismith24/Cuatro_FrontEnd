@@ -1,26 +1,72 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./App.css";
+import Home from "./Components/Home/Home";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css";
+import NavBar from "./Components/NavBar/NavBar";
+import Login from "./Components/Login/Login";
+import Cookie from "js-cookie";
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <Router>
+        <div>
+          <NavBar />
+
+          <Switch>
+            <Route exact path="/">
+              <Redirect
+                to={{
+                  pathname: "/login",
+                }}
+              />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <PrivateRoute path="/home">
+              <Home />
+            </PrivateRoute>
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
 }
 
-export default App;
+function PrivateRoute({ children, ...rest }) {
+  const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        JWT != "null" ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
+}
