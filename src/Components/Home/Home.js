@@ -9,7 +9,7 @@ export default class Home extends React.Component {
     this.state = {};
   }
   componentDidMount = () => {
-    /*const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
     fetch(backendAPI + "/users", {
       method: "GET",
       headers: {
@@ -20,10 +20,9 @@ export default class Home extends React.Component {
         this.setState({ error: true });
       } else
         res.json().then((resJson) => {
-          this.setState({ email: resJson.email, picture: resJson.picture });
+          this.setState({ email: resJson.email, picture: resJson.picture, username: resJson.username });
         });
     });
-    */
   };
   render() {
     const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
@@ -31,15 +30,16 @@ export default class Home extends React.Component {
     return (
       <React.Fragment>
         <center>
-          <h3 className="bebas" style={{ marginTop: 100 }}>
+          <h2 className="bebas" style={{ marginTop: 100 }}>
             Welcome Home!
-          </h3>
+          </h2>
           <img
             src={this.state.picture}
             className="shadow"
-            style={{ height: 100, width: 100, borderRadius: 50 }}
+            style={{ height: 150, width: 150, borderRadius: 75 }}
           />
-          <h6>{this.state.email}</h6>
+          <h4>Email: {this.state.email}</h4>
+          <h4>Username: {this.state.username}</h4>
         </center>
       </React.Fragment>
     );
