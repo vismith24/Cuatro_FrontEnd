@@ -1,6 +1,7 @@
 import React from "react";
 import Cookie from "js-cookie";
 import { backendAPI } from "../../constants";
+import PaymentHandler from '../PaymentHandler';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ export default class Home extends React.Component {
             style={{ height: 100, width: 100, borderRadius: 50 }}
           />
           <h6>{this.state.email}</h6>
+          <button onClick={PaymentHandler}>Pay</button>
         </center>
       </React.Fragment>
     );
