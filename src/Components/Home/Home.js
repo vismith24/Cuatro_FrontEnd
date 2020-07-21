@@ -1,6 +1,7 @@
 import React from "react";
 import Cookie from "js-cookie";
 import { backendAPI } from "../../constants";
+import PaymentHandler from '../PaymentHandler';
 import MusicPlayer from '../MusicPlayer/MusicPlayer';
 
 export default class Home extends React.Component {
@@ -38,6 +39,8 @@ export default class Home extends React.Component {
             className="shadow"
             style={{ height: 150, width: 150, borderRadius: 75 }}
           />
+          <h6>{this.state.email}</h6>
+          <button onClick={PaymentHandler}>Pay</button>
           <h4>Email: {this.state.email}</h4>
           <h4>Username: {this.state.username}</h4>
         </center>
