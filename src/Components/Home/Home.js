@@ -1,6 +1,7 @@
 import React from "react";
 import Cookie from "js-cookie";
 import { backendAPI } from "../../constants";
+import MusicPlayer from '../MusicPlayer/MusicPlayer';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ export default class Home extends React.Component {
     this.state = {};
   }
   componentDidMount = () => {
-    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+    /*const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
     fetch(backendAPI + "/users", {
       method: "GET",
       headers: {
@@ -22,6 +23,7 @@ export default class Home extends React.Component {
           this.setState({ email: resJson.email, picture: resJson.picture });
         });
     });
+    */
   };
   render() {
     const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";

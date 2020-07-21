@@ -34,6 +34,12 @@ export default class NavBar extends React.Component {
                 window.location.replace("/login");
               }}
             >
+                  <NavItem className="navItem">
+                <NavLink active href="/music">
+                  Music
+                </NavLink>
+              </NavItem>
+
               <NavItem className="navItem">
                 <NavLink href="#">Log out</NavLink>
               </NavItem>
