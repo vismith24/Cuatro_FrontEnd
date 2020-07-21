@@ -1,6 +1,7 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
 import './MusicPlayer.scss';
+import Cookie from "js-cookie";
 
 export default class CardProfile extends React.Component {
     state = {
@@ -150,6 +151,7 @@ export default class CardProfile extends React.Component {
   
     
     render() {
+      const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
       const { musicList, index, currentTime, pause } = this.state;
       const currentSong = musicList[index];
       return (

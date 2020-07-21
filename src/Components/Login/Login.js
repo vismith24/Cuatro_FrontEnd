@@ -260,7 +260,7 @@ class UsernameForm extends React.Component {
   };
 
   onUsernameChange = (text) => {
-    if (text.length > 3 && /^[a-zA-Z]+$/.test(text)) {
+    if (text.length > 3 && /^[a-zA-Z0-9._]+$/.test(text)) {
       fetch(backendAPI + `/users/username?username=${text}`)
         .then(res => res.json())
         .then(resJson => {
@@ -371,7 +371,7 @@ class SignUpForm extends React.Component {
     };
   }
   onUsernameChange = (text) => {
-    if (text.length > 3 && /^[a-zA-Z]+$/.test(text)) {
+    if (text.length > 3 && /^[a-zA-Z0-9._]+$/.test(text)) {
       fetch(backendAPI + `/users/username?username=${text}`)
         .then(res => res.json())
         .then(resJson => {

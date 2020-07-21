@@ -28,22 +28,24 @@ export default class NavBar extends React.Component {
             </NavLink>
           </NavItem>
           {JWT != "null" ? (
-            <div
-              onClick={() => {
-                Cookie.set("JWT", null);
-                window.location.replace("/login");
-              }}
-            >
-                  <NavItem className="navItem">
+              <span style={{float:'left'}}>
+                <NavItem className="navItem">
                 <NavLink active href="/music">
                   Music
                 </NavLink>
               </NavItem>
-
+              <span
+              onClick={() => {
+                Cookie.set("JWT", null);
+                window.location.replace("/login");
+              }}
+              style={{float:'right'}}
+            >
               <NavItem className="navItem">
                 <NavLink href="#">Log out</NavLink>
               </NavItem>
-            </div>
+            </span>
+            </span>
           ) : (
             <NavItem className="navItem">
               <NavLink href="/login">Log in</NavLink>

@@ -41,9 +41,9 @@ export default class App extends React.Component {
             <Route path="/login">
               <Login />
             </Route>
-            <Route path="/music">
+            <PrivateRoute path="/music">
               <MusicPlayer />
-            </Route>
+            </PrivateRoute>
             <PrivateRoute path="/home">
               <Home />
             </PrivateRoute>
@@ -55,6 +55,7 @@ export default class App extends React.Component {
 }
 
 function PrivateRoute({ children, ...rest }) {
+  console.log(children, rest);
   const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
   return (
     <Route

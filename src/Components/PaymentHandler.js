@@ -1,5 +1,6 @@
 import Axios from 'axios'
 import Cookie from 'js-cookie';
+
 const paymentHandler = async (e) => {
     const API_URL = 'http://localhost:8000/';
     e.preventDefault();
