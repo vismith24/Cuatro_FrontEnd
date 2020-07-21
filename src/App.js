@@ -9,13 +9,14 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import "./App.css";
+import "./App.scss";
 import Home from "./Components/Home/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import NavBar from "./Components/NavBar/NavBar";
 import Login from "./Components/Login/Login";
 import Cookie from "js-cookie";
+import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -39,6 +40,9 @@ export default class App extends React.Component {
             </Route>
             <Route path="/login">
               <Login />
+            </Route>
+            <Route path="/music">
+              <MusicPlayer />
             </Route>
             <PrivateRoute path="/home">
               <Home />

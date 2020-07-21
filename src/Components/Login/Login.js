@@ -370,7 +370,7 @@ class SignUpForm extends React.Component {
       usernameValid: null
     };
   }
-  onUsernameChange = text => {
+  onUsernameChange = (text) => {
     if (text.length > 3 && /^[a-zA-Z]+$/.test(text)) {
       fetch(backendAPI + `/users/username?username=${text}`)
         .then(res => res.json())
