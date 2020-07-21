@@ -9,13 +9,14 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import "./App.css";
+import "./App.scss";
 import Home from "./Components/Home/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import NavBar from "./Components/NavBar/NavBar";
 import Login from "./Components/Login/Login";
 import Cookie from "js-cookie";
+import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -40,6 +41,9 @@ export default class App extends React.Component {
             <Route path="/login">
               <Login />
             </Route>
+            <PrivateRoute path="/music">
+              <MusicPlayer />
+            </PrivateRoute>
             <PrivateRoute path="/home">
               <Home />
             </PrivateRoute>
@@ -51,6 +55,7 @@ export default class App extends React.Component {
 }
 
 function PrivateRoute({ children, ...rest }) {
+  console.log(children, rest);
   const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
   return (
     <Route
