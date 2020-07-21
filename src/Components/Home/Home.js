@@ -1,5 +1,6 @@
 import React from "react";
 import Cookie from "js-cookie";
+import { Button } from 'shards-react';
 import { backendAPI } from "../../constants";
 import PaymentHandler from '../PaymentHandler';
 //import MusicPlayer from '../MusicPlayer/MusicPlayer';
@@ -41,7 +42,7 @@ export default class Home extends React.Component {
           />
           <h4>Email: {this.state.email}</h4>
           <h4>Username: {this.state.username}</h4>
-          <button onClick={PaymentHandler}>Subscribe to CUATRO</button>
+          <Button outline pill onClick={PaymentHandler}>Subscribe to CUATRO</Button>
         </center>
       </React.Fragment>
     );
