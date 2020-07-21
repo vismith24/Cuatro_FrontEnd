@@ -2,7 +2,11 @@ import React from "react";
 import Cookie from "js-cookie";
 import { backendAPI } from "../../constants";
 import PaymentHandler from '../PaymentHandler';
+<<<<<<< HEAD
 //import MusicPlayer from '../MusicPlayer/MusicPlayer';
+=======
+import MusicPlayer from '../MusicPlayer/MusicPlayer';
+>>>>>>> 95ea3c8aa4f9c19c57109870e31ea5469756b161
 
 export default class Home extends React.Component {
   constructor(props) {
