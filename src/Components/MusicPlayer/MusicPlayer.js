@@ -1,20 +1,28 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
 import './MusicPlayer.scss';
+import Cookie from "js-cookie";
+import { backendAPI } from "../../constants";
 
 export default class CardProfile extends React.Component {
-    state = {
-      index: 3,
-      currentTime: '0:00',
-      musicList: [{name:'Nice piano and ukulele', author: 'Royalty', img: 'https://www.bensound.com/bensound-img/buddy.jpg', audio:'https://www.bensound.com/bensound-music/bensound-buddy.mp3', duration: '2:02'}, 
-        {name:'Gentle acoustic', author: 'Acoustic', img: 'https://www.bensound.com/bensound-img/sunny.jpg', audio:'https://www.bensound.com//bensound-music/bensound-sunny.mp3', duration: '2:20'},
-        {name:'Corporate motivational', author: 'Corporate', img: 'https://www.bensound.com/bensound-img/energy.jpg', audio:'https://www.bensound.com/bensound-music/bensound-energy.mp3', duration: '2:59'},
-        {name:'Slow cinematic', author: 'Royalty', img: 'https://www.bensound.com/bensound-img/slowmotion.jpg', audio:'https://www.bensound.com/bensound-music/bensound-slowmotion.mp3', duration: '3:26'}],
-      pause: false,
-    };
-  
+    constructor(props){
+        super(props);
+        this.state = {
+            index: 0,
+            currentTime: '0:00',
+            musicList: [{name:'La vie en rose', author: 'Cristin Miloti', img: 'https://www.bensound.com/bensound-img/summer.jpg', audio:'https://drive.google.com/uc?export=download&id=1k0na9kj-53ndPpQ_1gOzMJe-_E44ttCd', duration: '1:50'}],
+            pause: false,
+          };
+    }
   
    componentDidMount() {
+    fetch(backendAPI + `/music/songs`)
+    .then(res => res.json())
+    .then(resJson => {
+      this.setState({
+        musicList: resJson.musicList
+      });
+    });
      this.playerRef.addEventListener("timeupdate", this.timeUpdate, false);
      this.playerRef.addEventListener("ended", this.nextSong, false);
      this.timelineRef.addEventListener("click", this.changeCurrentTime, false);
@@ -150,6 +158,7 @@ export default class CardProfile extends React.Component {
   
     
     render() {
+      const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
       const { musicList, index, currentTime, pause } = this.state;
       const currentSong = musicList[index];
       return (
@@ -164,7 +173,7 @@ export default class CardProfile extends React.Component {
               <img src={ currentSong.img }/>
              </div>
             <span className="song-name">{ currentSong.name }</span>
-            <span className="song-autor">{ currentSong.author }</span>
+            <span className="song-autor">{ currentSong.artists }</span>
             
             <div className="time">
               <div className="current-time">{ currentTime }</div>
@@ -173,19 +182,19 @@ export default class CardProfile extends React.Component {
             
             <div ref={ref => this.timelineRef = ref} id="timeline">
               <div ref={ref => this.playheadRef = ref} id="playhead"></div>
-              <div ref={ref => this.hoverPlayheadRef = ref} class="hover-playhead" data-content="0:00"></div>
+              <div ref={ref => this.hoverPlayheadRef = ref} className="hover-playhead" data-content="0:00"></div>
             </div>
             
             <div className="controls">
-              <button onClick={this.prevSong} className="prev prev-next current-btn"><i className="fas fa-backward"></i></button>
+              <button onClick={this.prevSong} className="prev prev-next current-btn"><img src={require("../../images/prev.png")} width="40px" className="prev prev-next current-btn" onClick={this.prevSong}></img><i className="fas fa-backward"></i></button>
               
               <button onClick={this.playOrPause} className="play current-btn">
                 {
-                  (!pause) ? <i className="fas fa-play"></i>
-                  :<i class="fas fa-pause"></i>
+                  (!pause) ? <React.Fragment><img src={require("../../images/play.png")} width="35px" className="play current-btn" onClick={this.playOrPause}></img><i className="fas fa-play"></i></React.Fragment>
+                  : <React.Fragment><img src={require("../../images/pause.png")} width="35px" className="play current-btn" onClick={this.playOrPause}></img><i className="fas fa-pause"></i></React.Fragment>
                 }
               </button>
-              <button onClick={this.nextSong} className="next prev-next current-btn"><i className="fas fa-forward"></i></button>
+              <button onClick={this.nextSong} className="next prev-next current-btn"><img src={require("../../images/next.png")} width="40px" className="next prev-next current-btn" onClick={this.nextSong}></img><i className="fas fa-forward"></i></button>
             </div>
             
           </div>
@@ -200,7 +209,7 @@ export default class CardProfile extends React.Component {
                              <img className="track-img" src={music.img}/>
                              <div className="track-discr" >
                                <span className="track-name" >{music.name}</span>
-                               <span className="track-author" >{music.author}</span>
+                               <span className="track-author" >{music.artists}</span>
                              </div>
                              <span className="track-duration" >
                                {(index === key)

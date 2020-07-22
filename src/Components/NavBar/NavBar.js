@@ -32,6 +32,7 @@ export default class NavBar extends React.Component {
             <img
               src={require("../../images/cuatro-logo.png")}
               style={{ height: 60 }}
+              alt="Why are we even alive just to suffer?"
             />
             
           </div>
