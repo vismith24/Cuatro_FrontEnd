@@ -186,15 +186,15 @@ export default class CardProfile extends React.Component {
             </div>
             
             <div className="controls">
-              <button onClick={this.prevSong} className="prev prev-next current-btn"><i className="fas fa-backward"></i></button>
+              <button onClick={this.prevSong} className="prev prev-next current-btn"><img src={require("../../images/prev.png")} width="40px" className="prev prev-next current-btn" onClick={this.prevSong}></img><i className="fas fa-backward"></i></button>
               
               <button onClick={this.playOrPause} className="play current-btn">
                 {
-                  (!pause) ? <i className="fas fa-play"></i>
-                  :<i className="fas fa-pause"></i>
+                  (!pause) ? <React.Fragment><img src={require("../../images/play.png")} width="35px" className="play current-btn" onClick={this.playOrPause}></img><i className="fas fa-play"></i></React.Fragment>
+                  : <React.Fragment><img src={require("../../images/pause.png")} width="35px" className="play current-btn" onClick={this.playOrPause}></img><i className="fas fa-pause"></i></React.Fragment>
                 }
               </button>
-              <button onClick={this.nextSong} className="next prev-next current-btn"><i className="fas fa-forward"></i></button>
+              <button onClick={this.nextSong} className="next prev-next current-btn"><img src={require("../../images/next.png")} width="40px" className="next prev-next current-btn" onClick={this.nextSong}></img><i className="fas fa-forward"></i></button>
             </div>
             
           </div>
