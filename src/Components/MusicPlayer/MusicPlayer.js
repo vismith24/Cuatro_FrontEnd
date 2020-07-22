@@ -111,8 +111,10 @@ export default class CardProfile extends React.Component {
         index: (index + 1) % musicList.length
       });
       this.updatePlayer();
+      var audio = this.playerRef;
       if(pause){
-        this.playerRef.play();
+        setTimeout(() => {
+          this.playerRef.play();}, 50);
       }
     };
   
@@ -124,7 +126,8 @@ export default class CardProfile extends React.Component {
       });
       this.updatePlayer();
       if(pause){
-        this.playerRef.play();
+        setTimeout(() => {
+          this.playerRef.play();}, 50);
       }
     };
      

@@ -17,6 +17,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import Login from "./Components/Login/Login";
 import Cookie from "js-cookie";
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
+import Search from './Components/Search/Search';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -41,8 +42,11 @@ export default class App extends React.Component {
             <Route path="/login">
               <Login />
             </Route>
-            <PrivateRoute path="/music">
+            <Route path="/music">
               <MusicPlayer />
+            </Route>
+            <PrivateRoute path="/search">
+                <Search />
             </PrivateRoute>
             <PrivateRoute path="/home">
               <Home />
