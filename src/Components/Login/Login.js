@@ -63,7 +63,6 @@ const responseGoogle = response => {
   })
     .then(res => res.json())
     .then(resJson => {
-      console.log(resJson.JWT);
       Cookie.set("JWT", resJson.JWT);
       window.location.replace("/home");
     });
@@ -327,7 +326,6 @@ class PasswordForm extends React.Component {
         this.setState({ error: true });
       } else
         res.json().then(resJson => {
-          console.log(resJson);
           Cookie.set("JWT", resJson.JWT);
           window.location.replace("/home");
         });

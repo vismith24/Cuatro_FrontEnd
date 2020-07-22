@@ -14,7 +14,6 @@ export default class NavBar extends React.Component {
   }
   logout() {
     Cookie.set("JWT", null);
-    console.log(Cookie.get("JWT"))
     window.location.replace('/login')
   }
   render() {
