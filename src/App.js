@@ -55,7 +55,6 @@ export default class App extends React.Component {
 }
 
 function PrivateRoute({ children, ...rest }) {
-  console.log(children, rest);
   const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
   return (
     <Route
