@@ -98,12 +98,12 @@ export default function ProductCard({ item }) {
             <IconButton aria-label="info">
               <InfoIcon />
             </IconButton></HtmlTooltip>
-            <HtmlTooltip leaveDelay={500} interactive title={<React.Fragment><MuiPickersUtilsProvider utils={MomentUtils}>
+            {item.type === 'Studio' ? (<HtmlTooltip leaveDelay={500} interactive title={<React.Fragment><MuiPickersUtilsProvider utils={MomentUtils}>
       <Calendar date={selectedDate} onMonthChange={handleMonthChange} disablePast autoOk onChange={handleDateChange} format='yyyy/MM/DD' />
     </MuiPickersUtilsProvider></React.Fragment>}>
             <IconButton aria-label="info">
               <EventIcon />
-            </IconButton></HtmlTooltip>
+            </IconButton></HtmlTooltip>) : null}
           </div>
         </div>
         <CardMedia
