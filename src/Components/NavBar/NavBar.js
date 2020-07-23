@@ -42,14 +42,18 @@ export default class NavBar extends React.Component {
             </NavLink>
           </NavItem>
 
-          {console.log(Cookie.get("JWT"))}
           {JWT != "null" ? (
-
               <NavItem className="navItem">
                 <NavLink active href="/music">
                   Music
                 </NavLink>
               </NavItem> ) : null }
+              {JWT != "null" ? (
+                <NavItem className="navItem">
+                  <NavLink active href="/store">
+                    Store
+                  </NavLink>
+                </NavItem> ) : null }
           {JWT != "null" ? (
             <NavItem className="navItem">
                 <NavLink href="#" onClick={this.logout}>Log out</NavLink>

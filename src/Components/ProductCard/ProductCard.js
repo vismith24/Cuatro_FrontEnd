@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ProductCard({ user }) {
+export default function ProductCard({ item }) {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -48,13 +48,13 @@ export default function ProductCard({ user }) {
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="h5">
-              {user.username}
+              {item.product}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {user.email}
+              {item.type}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {user.name}
+              {item.description}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
@@ -68,8 +68,8 @@ export default function ProductCard({ user }) {
         </div>
         <CardMedia
           className={classes.cover}
-          image={user.photo}
-          title={user.username}
+          src={item.picture}
+          title={item.product}
         />
       </Card>
     </div>
