@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { withStyles, makeStyles, useTheme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -7,6 +7,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import InfoIcon from "@material-ui/icons/Info";
+import Tooltip from "@material-ui/core/Tooltip";
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
@@ -38,6 +40,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 400,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
 export default function ProductCard({ item }) {
   const classes = useStyles();
   const theme = useTheme();
@@ -47,23 +59,26 @@ export default function ProductCard({ item }) {
       <Card className={classes.root}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
-            <Typography component="h5" variant="h5">
-              {item.product}
+            <Typography component="h6" variant="h6">
+              Item: {item.product}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {item.type}
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {item.description}
+              Price: ₹{item.price}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
             <IconButton aria-label="add">
               <AddShoppingCartIcon />
             </IconButton>
+            <HtmlTooltip title={<React.Fragment><Typography variant="caption" color="textSecondary">
+              {item.type}<br />
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              Description: {item.description}
+            </Typography></React.Fragment>}>
             <IconButton aria-label="info">
               <InfoIcon />
-            </IconButton>
+            </IconButton></HtmlTooltip>
           </div>
         </div>
         <CardMedia
