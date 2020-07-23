@@ -68,7 +68,7 @@ export default function ProductCard({ item }) {
         </div>
         <CardMedia
           className={classes.cover}
-          src={item.picture}
+          image={item.picture}
           title={item.product}
         />
       </Card>
