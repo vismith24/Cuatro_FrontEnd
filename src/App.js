@@ -19,6 +19,7 @@ import Cookie from "js-cookie";
 import MusicPlayer from './Components/MusicPlayer/MusicPlayer';
 import Search from './Components/Search/Search';
 import Store from './Components/Store/Store';
+import Profile from "./Components/Profile/Profile";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -48,6 +49,9 @@ export default class App extends React.Component {
             </PrivateRoute>
             <PrivateRoute path="/store">
               <Store />
+            </PrivateRoute>
+            <PrivateRoute path="/profile">
+              <Profile />
             </PrivateRoute>
             <PrivateRoute path="/search">
                 <Search />
