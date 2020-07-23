@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { withStyles, makeStyles, useTheme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -7,7 +7,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import InfoIcon from "@material-ui/icons/Info";
+import EventIcon from '@material-ui/icons/Event';
 import Tooltip from "@material-ui/core/Tooltip";
+import { Calendar, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,6 +57,21 @@ const HtmlTooltip = withStyles((theme) => ({
 export default function ProductCard({ item }) {
   const classes = useStyles();
   const theme = useTheme();
+  const [selectedDate, setSelectedDate ] = useState(moment(new Date()));
+
+  const handleMonthChange = (date) => {
+    var today = moment(new Date());
+    if (date._d > today) {
+      setSelectedDate(date);
+    }
+    else {
+      setSelectedDate(today);
+    }
+  }
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  }
 
   return (
     <div className={classes.rootParent}>
@@ -78,6 +97,12 @@ export default function ProductCard({ item }) {
             </Typography></React.Fragment>}>
             <IconButton aria-label="info">
               <InfoIcon />
+            </IconButton></HtmlTooltip>
+            <HtmlTooltip leaveDelay={500} interactive title={<React.Fragment><MuiPickersUtilsProvider utils={MomentUtils}>
+      <Calendar date={selectedDate} onMonthChange={handleMonthChange} disablePast autoOk onChange={handleDateChange} format='yyyy/MM/DD' />
+    </MuiPickersUtilsProvider></React.Fragment>}>
+            <IconButton aria-label="info">
+              <EventIcon />
             </IconButton></HtmlTooltip>
           </div>
         </div>
