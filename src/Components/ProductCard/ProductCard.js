@@ -12,6 +12,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { Calendar, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
+import { backendAPI } from "../../constants";
+import Cookie from 'js-cookie';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -73,6 +75,33 @@ export default function ProductCard({ item }) {
     setSelectedDate(date);
   }
 
+  const handleCartUpdate = (item) => {
+      const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+      var itemID = item._id; 
+      var body;
+      if (item.type === 'Studio') {
+        var date = moment(selectedDate).format('YYYY-MM-DD');
+        body = JSON.stringify({ itemID, date });
+        console.log(JWT, itemID, date, body);
+      }
+      else {
+        body = JSON.stringify({ itemID });
+        console.log(JWT, itemID, body);
+      }
+      fetch(backendAPI + `/cart/add`, {
+        method: "POST",
+        headers: {
+          Authorization: JWT,
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: body
+      }).then( res => res.json())
+      .then(resJson => {
+        console.log(resJson);
+      })
+  }
+
   return (
     <div className={classes.rootParent}>
       <Card className={classes.root}>
@@ -86,7 +115,7 @@ export default function ProductCard({ item }) {
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton aria-label="add">
+            <IconButton onClick={() => handleCartUpdate(item)} aria-label="add">
               <AddShoppingCartIcon />
             </IconButton>
             <HtmlTooltip title={<React.Fragment><Typography variant="caption" color="textSecondary">
