@@ -1,20 +1,62 @@
 import React from "react";
 import Cookie from "js-cookie";
-import { Button, Container, InputLabel, MenuItem, Select, TextField, Typography } from '@material-ui/core';
+import axios from 'axios';
+import {Button, Container, InputLabel, MenuItem, Select,
+TextField, Typography } from '@material-ui/core';
+import Alert from '../Alert/Alert'
+import { url } from '../../Config/config'
 
 export default class AddProduct extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            type: null
+            item: {},
+            error: null,
+            success: false
         }
     }
 
     handleChange = (event) => {
+        event.persist();
+        this.setState((prevState) => ({
+            item: {
+                ...prevState.item,
+                [event.target.id]: event.target.value
+            }
+        }),
+        () => {
+            console.log(this.state.item)
+        })
+    }
+
+    handleSubmit = () => {
+        axios.post(`${url}/store/add_item`, this.state.item, {
+            headers: {
+                Authorization: Cookie.get("JWT")
+            }
+        })
+        .then(res => {
+            this.setState({
+                success: true
+            })
+        })
+        .catch(error => {
+            this.setState({
+                error: error
+                
+            })
+        })
+    }
+
+    changeSuccess = () => {
         this.setState({
-            [event.target.id]: event.target.value
-        }, () => {
-            console.log(this.state, event.target)
+            success: false
+        })
+    }
+
+    changeErrorToNull = () => {
+        this.setState({
+            error: null
         })
     }
 
@@ -41,7 +83,7 @@ export default class AddProduct extends React.Component {
                 <Select
                 labelId="product-type"
                 id="type"
-                value={this.state.type}
+                value={this.state.item.type}
                 onChange={(event, id) => {
                     event["target"]["id"] = id.props.id
                     this.handleChange(event)
@@ -67,6 +109,14 @@ export default class AddProduct extends React.Component {
                 </Button>
 
                 </form>
+
+                {this.state.success ? (
+                    <Alert type="success" message="Item Added" afterCloseFunction={this.changeSuccess}/>
+                ): null}
+
+                {this.state.error ? (
+                    <Alert type="error" message="Some Error Occured! Check if your data is correct" afterCloseFunction={this.changeErrorToNull}/>
+                ): null}
             </Container>
         )
     }
