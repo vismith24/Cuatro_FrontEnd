@@ -1,8 +1,17 @@
 import React from 'react';
 //import ReactDOM from 'react-dom';
+import axios from 'axios';
+import { url } from '../../Config/config'
 import './MusicPlayer.scss';
 import Cookie from "js-cookie";
 import { backendAPI } from "../../constants";
+import { IconButton } from '@material-ui/core'
+import PlaylistAddOutlinedIcon from '@material-ui/icons/PlaylistAddOutlined';
+import SkipNextOutlinedIcon from '@material-ui/icons/SkipNextOutlined';
+import SkipPreviousOutlinedIcon from '@material-ui/icons/SkipPreviousOutlined';
+import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
+import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
+import AddToPlaylist from './AddToPlaylist'
 
 export default class CardProfile extends React.Component {
     constructor(props){
@@ -12,10 +21,13 @@ export default class CardProfile extends React.Component {
             currentTime: '0:00',
             musicList: [{name:'La vie en rose', author: 'Cristin Miloti', img: 'https://www.bensound.com/bensound-img/summer.jpg', audio:'https://drive.google.com/uc?export=download&id=1k0na9kj-53ndPpQ_1gOzMJe-_E44ttCd', duration: '1:50'}],
             pause: false,
+            playlists: null,
+            openPlaylistsDialog: false
           };
     }
   
    componentDidMount() {
+    this.getAllPlaylist()
     fetch(backendAPI + `/music/songs`)
     .then(res => res.json())
     .then(resJson => {
@@ -37,6 +49,59 @@ export default class CardProfile extends React.Component {
       this.timelineRef.removeEventListener("mousemove", this.hoverTimeLine);
       this.timelineRef.removeEventListener("mouseout", this.resetTimeLine);
     }
+
+    getAllPlaylist = () => {
+      axios.post(`${url}/playlist/getall`, {}, {
+          headers: {
+              Authorization: Cookie.get("JWT")
+          }
+      })
+      .then(res => {
+          console.log('success', res.data)
+          this.setState({
+              playlists: res.data
+          })
+      })
+      .catch(error => {
+          this.setState({
+              error: error
+              
+          })
+      })
+  }
+
+  addToPlaylist = () => {
+    this.setState({
+      openPlaylistsDialog: true
+    })
+  }
+
+  closePlaylistDialog = (value) => {
+    this.setState({
+      openPlaylistsDialog: false
+    })
+    if (value == null) {
+      return
+    }
+    console.log(this.state.musicList[this.state.index], value)
+    axios.post(`${url}/playlist/add`, {
+      name: value,
+      music: this.state.musicList[this.state.index]
+    }, {
+      headers: {
+          Authorization: Cookie.get("JWT")
+        }
+    })
+    .then(res => {
+        console.log('success on adding to playlist', res.data)
+    })
+    .catch(error => {
+        this.setState({
+            error: error
+            
+        })
+    })
+  }
   
   changeCurrentTime = (e) => {
     const duration = this.playerRef.duration;
@@ -166,6 +231,17 @@ export default class CardProfile extends React.Component {
       const currentSong = musicList[index];
       return (
         <center>
+        {
+          this.state.openPlaylistsDialog ? (
+            <AddToPlaylist
+              selectedValue={null}
+              open={this.state.openPlaylistsDialog}
+              onClose={this.closePlaylistDialog}
+              playlists={this.state.playlists}
+            />
+          ) : null
+        }
+        
         <div className="card">
           <div className="current-song">
             <audio ref={ref => this.playerRef = ref}>
@@ -189,15 +265,22 @@ export default class CardProfile extends React.Component {
             </div>
             
             <div className="controls">
-              <button onClick={this.prevSong} className="prev prev-next current-btn"><img src={require("../../images/prev.png")} width="40px" className="prev prev-next current-btn" onClick={this.prevSong}></img><i className="fas fa-backward"></i></button>
+
+              <IconButton onClick={this.prevSong}>
+                <SkipPreviousOutlinedIcon />
+              </IconButton>
               
-              <button onClick={this.playOrPause} className="play current-btn">
-                {
-                  (!pause) ? <React.Fragment><img src={require("../../images/play.png")} width="35px" className="play current-btn" onClick={this.playOrPause}></img><i className="fas fa-play"></i></React.Fragment>
-                  : <React.Fragment><img src={require("../../images/pause.png")} width="35px" className="play current-btn" onClick={this.playOrPause}></img><i className="fas fa-pause"></i></React.Fragment>
-                }
-              </button>
-              <button onClick={this.nextSong} className="next prev-next current-btn"><img src={require("../../images/next.png")} width="40px" className="next prev-next current-btn" onClick={this.nextSong}></img><i className="fas fa-forward"></i></button>
+              <IconButton onClick={this.playOrPause}>
+                {!pause ? <PlayArrowOutlinedIcon />: <PauseOutlinedIcon />}
+              </IconButton>
+
+              <IconButton onClick={this.addToPlaylist}>
+                <PlaylistAddOutlinedIcon />
+              </IconButton>
+
+              <IconButton onClick={this.nextSong}>
+                <SkipNextOutlinedIcon />
+              </IconButton>
             </div>
             
           </div>

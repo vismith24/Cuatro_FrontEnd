@@ -12,7 +12,8 @@ export default class AddProduct extends React.Component {
         this.state = {
             item: {},
             error: null,
-            success: false
+            success: false,
+            isNumber: true
         }
     }
 
@@ -30,6 +31,9 @@ export default class AddProduct extends React.Component {
     }
 
     handleSubmit = () => {
+        if (!this.state.isNumber) {
+            return
+        }
         axios.post(`${url}/store/add_item`, this.state.item, {
             headers: {
                 Authorization: Cookie.get("JWT")
@@ -75,7 +79,21 @@ export default class AddProduct extends React.Component {
                 <TextField id="product" label="Product Name" variant="outlined" style={{marginTop: '2em', marginRight:'2em', width:'100%'}} onChange={this.handleChange}/>
 
                 <TextField id="price" label="Price in 	
-                rupees" variant="outlined" style={{marginTop:'2em', marginRight:'2em', width:'100%'}} onChange={this.handleChange}/>
+                rupees" variant="outlined" style={{marginTop:'2em', marginRight:'2em', width:'100%'}} onChange={event => {
+                    this.handleChange(event);
+                    if (isNaN(event.target.value) && this.state.isNumber) {
+                        this.setState({
+                            isNumber: false
+                        })
+                    }
+                    else if (!isNaN(event.target.value) && !this.state.isNumber) {
+                        this.setState({
+                            isNumber: true
+                        })
+                    }
+                }}
+                error={!this.state.isNumber}
+                />
 
                 <TextField id="picture" label="Prodcut Image Url" variant="outlined" style={{marginTop:'2em', marginRight:'2em', width:'100%'}} onChange={this.handleChange}/>
 

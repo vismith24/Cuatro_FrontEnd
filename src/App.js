@@ -22,6 +22,7 @@ import Store from './Components/Store/Store';
 import Profile from "./Components/Profile/Profile";
 import AddProduct from './Components/AddProduct/AddProduct'
 import Cart from "./Components/Cart/Cart";
+import Playlist from "./Components/Playlist/Playlist";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -57,12 +58,15 @@ export default class App extends React.Component {
             </PrivateRoute>
             <PrivateRoute path="/profile">
               <Profile />
-            </PrivateRoute  >
+            </PrivateRoute>
             <PrivateRoute path="/search">
                 <Search />
             </PrivateRoute>
             <PrivateRoute path="/home">
               <Home />
+            </PrivateRoute>
+            <PrivateRoute path="/playlist">
+              <Playlist />
             </PrivateRoute>
             <Route path="/additem">
               <AddProduct />
