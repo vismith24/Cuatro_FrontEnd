@@ -75,6 +75,10 @@ export default class Playlist extends React.Component {
             }
         })
         .then(res => {
+            this.getAllPlaylist();
+            this.setState({
+                newPlaylistCreation: false
+            })
             console.log('success')
         })
         .catch(error => {

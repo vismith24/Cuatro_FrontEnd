@@ -20,7 +20,7 @@ export default class CardProfile extends React.Component {
         this.state = {
             index: 0,
             currentTime: '0:00',
-            musicList: [{name:'La vie en rose', author: 'Cristin Miloti', img: 'https://www.bensound.com/bensound-img/summer.jpg', audio:'https://drive.google.com/uc?export=download&id=1k0na9kj-53ndPpQ_1gOzMJe-_E44ttCd', duration: '1:50'}],
+            musicList: [{name:'La vie en rose', author: 'Cristin Milioti', img: 'https://www.bensound.com/bensound-img/summer.jpg', audio:'https://drive.google.com/uc?export=download&id=1k0na9kj-53ndPpQ_1gOzMJe-_E44ttCd', duration: '1:50'}],
             pause: false,
             playlists: null,
             openPlaylistsDialog: false
@@ -51,11 +51,13 @@ export default class CardProfile extends React.Component {
    }
   
     componentWillUnmount() {
-      this.playerRef.removeEventListener("timeupdate", this.timeUpdate);
-      this.playerRef.removeEventListener("ended", this.nextSong);
-      this.timelineRef.removeEventListener("click", this.changeCurrentTime);
-      this.timelineRef.removeEventListener("mousemove", this.hoverTimeLine);
-      this.timelineRef.removeEventListener("mouseout", this.resetTimeLine);
+      if (this.state.musicList.length) {
+        this.playerRef.removeEventListener("timeupdate", this.timeUpdate);
+        this.playerRef.removeEventListener("ended", this.nextSong);
+        this.timelineRef.removeEventListener("click", this.changeCurrentTime);
+        this.timelineRef.removeEventListener("mousemove", this.hoverTimeLine);
+        this.timelineRef.removeEventListener("mouseout", this.resetTimeLine);
+      }
     }
 
     getAllPlaylist = () => {
@@ -238,97 +240,99 @@ export default class CardProfile extends React.Component {
     render() {
       const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
       const { musicList, index, currentTime, pause } = this.state;
-      const currentSong = musicList[index];
+      //const currentSong = musicList[index];
       return (
-        <center>
-        {
-          this.state.openPlaylistsDialog ? (
-            <AddToPlaylist
-              selectedValue={null}
-              open={this.state.openPlaylistsDialog}
-              onClose={this.closePlaylistDialog}
-              playlists={this.state.playlists}
-            />
-          ) : null
-        }
-        
-        {
-          this.state.success ? (
-            <Alert 
-              afterCloseFunction={() => {this.setState({success: false})}}
-              type="success"
-              message="Added to playlist"
-            />
-          ) : null
-        }
-
-
-        <div className="card">
-          <div className="current-song">
-            <audio ref={ref => this.playerRef = ref}>
-              <source src={ currentSong.audio } type="audio/ogg"/>
-                Your browser does not support the audio element.
-            </audio>
-            <div className="img-wrap">
-              <img src={ currentSong.img }/>
-             </div>
-            <span className="song-name">{ currentSong.name }</span>
-            <span className="song-autor">{ currentSong.artists }</span>
-            
-            <div className="time">
-              <div className="current-time">{ currentTime }</div>
-              <div className="end-time">{ currentSong.duration }</div>
-            </div>
-            
-            <div ref={ref => this.timelineRef = ref} id="timeline">
-              <div ref={ref => this.playheadRef = ref} id="playhead"></div>
-              <div ref={ref => this.hoverPlayheadRef = ref} className="hover-playhead" data-content="0:00"></div>
-            </div>
-            
-            <div className="controls">
-
-              <IconButton onClick={this.prevSong}>
-                <SkipPreviousOutlinedIcon />
-              </IconButton>
+        <React.Fragment>
+        {musicList.length ? (<center>
+          {
+            this.state.openPlaylistsDialog ? (
+              <AddToPlaylist
+                selectedValue={null}
+                open={this.state.openPlaylistsDialog}
+                onClose={this.closePlaylistDialog}
+                playlists={this.state.playlists}
+              />
+            ) : null
+          }
+          
+          {
+            this.state.success ? (
+              <Alert 
+                afterCloseFunction={() => {this.setState({success: false})}}
+                type="success"
+                message="Added to playlist"
+              />
+            ) : null
+          }
+  
+  
+          <div className="card">
+            <div className="current-song">
+              <audio ref={ref => this.playerRef = ref}>
+                <source src={ musicList[index].audio } type="audio/ogg"/>
+                  Your browser does not support the audio element.
+              </audio>
+              <div className="img-wrap">
+                <img src={ musicList[index].img }/>
+               </div>
+              <span className="song-name">{ musicList[index].name }</span>
+              <span className="song-autor">{ musicList[index].artists }</span>
               
-              <IconButton onClick={this.playOrPause}>
-                {!pause ? <PlayArrowOutlinedIcon />: <PauseOutlinedIcon />}
-              </IconButton>
-
-              <IconButton onClick={this.addToPlaylist}>
-                <PlaylistAddOutlinedIcon />
-              </IconButton>
-
-              <IconButton onClick={this.nextSong}>
-                <SkipNextOutlinedIcon />
-              </IconButton>
+              <div className="time">
+                <div className="current-time">{ currentTime }</div>
+                <div className="end-time">{ musicList[index].duration }</div>
+              </div>
+              
+              <div ref={ref => this.timelineRef = ref} id="timeline">
+                <div ref={ref => this.playheadRef = ref} id="playhead"></div>
+                <div ref={ref => this.hoverPlayheadRef = ref} className="hover-playhead" data-content="0:00"></div>
+              </div>
+              
+              <div className="controls">
+  
+                <IconButton onClick={this.prevSong}>
+                  <SkipPreviousOutlinedIcon />
+                </IconButton>
+                
+                <IconButton onClick={this.playOrPause}>
+                  {!pause ? <PlayArrowOutlinedIcon />: <PauseOutlinedIcon />}
+                </IconButton>
+  
+                <IconButton onClick={this.addToPlaylist}>
+                  <PlaylistAddOutlinedIcon />
+                </IconButton>
+  
+                <IconButton onClick={this.nextSong}>
+                  <SkipNextOutlinedIcon />
+                </IconButton>
+              </div>
+              
             </div>
-            
-          </div>
-          <div className="play-list" >
-            {musicList.map( (music, key=0) =>
-                           <div key={key} 
-                             onClick={()=>this.clickAudio(key)}
-                             className={"track " + 
-                               (index === key && !pause ?'current-audio':'') + 
-                               (index === key && pause ?'play-now':'')} >
-                             
-                             <img className="track-img" src={music.img}/>
-                             <div className="track-discr" >
-                               <span className="track-name" >{music.name}</span>
-                               <span className="track-author" >{music.artists}</span>
+            <div className="play-list" >
+              {musicList.map( (music, key=0) =>
+                             <div key={key} 
+                               onClick={()=>this.clickAudio(key)}
+                               className={"track " + 
+                                 (index === key && !pause ?'current-audio':'') + 
+                                 (index === key && pause ?'play-now':'')} >
+                               
+                               <img className="track-img" src={music.img}/>
+                               <div className="track-discr" >
+                                 <span className="track-name" >{music.name}</span>
+                                 <span className="track-author" >{music.artists}</span>
+                               </div>
+                               <span className="track-duration" >
+                                 {(index === key)
+                                   ?currentTime
+                                   :music.duration
+                                 }
+                               </span>
                              </div>
-                             <span className="track-duration" >
-                               {(index === key)
-                                 ?currentTime
-                                 :music.duration
-                               }
-                             </span>
-                           </div>
-                          )}
+                            )}
+            </div>
           </div>
-        </div>
-        </center>
+          </center>) : <div>No Song in Playlist</div>}
+          </React.Fragment>
       )
     }
   }
