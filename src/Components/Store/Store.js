@@ -11,6 +11,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import { backendAPI } from "../../constants";
 import Cookie from 'js-cookie';
+import AddProduct from "../AddProduct/AddProduct";
+import { Button } from 'shards-react';
+import { NavLink } from "shards-react";
 
 class Store extends Component {
   constructor(props) {
@@ -84,6 +87,12 @@ class Store extends Component {
 
     return (
       <Container>
+        <Typography variant="h2">
+            Store
+          </Typography>
+          <NavLink href='/add_item'>
+            <Button outline pill>List Your Product</Button>
+          </NavLink>
         <div>
           <Typography variant="h2">
             Instruments

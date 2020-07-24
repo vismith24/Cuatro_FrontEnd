@@ -64,9 +64,9 @@ export default class App extends React.Component {
             <PrivateRoute path="/home">
               <Home />
             </PrivateRoute>
-            <Route path="/additem">
+            <PrivateRoute path="/add_item">
               <AddProduct />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </div>
       </Router>

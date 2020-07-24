@@ -4,7 +4,7 @@ import axios from 'axios';
 import {Button, Container, InputLabel, MenuItem, Select,
 TextField, Typography } from '@material-ui/core';
 import Alert from '../Alert/Alert'
-import { url } from '../../Config/config'
+import { backendAPI } from '../../constants';
 
 export default class AddProduct extends React.Component {
     constructor(props) {
@@ -30,7 +30,7 @@ export default class AddProduct extends React.Component {
     }
 
     handleSubmit = () => {
-        axios.post(`${url}/store/add_item`, this.state.item, {
+        axios.post(`${backendAPI}/store/add_item`, this.state.item, {
             headers: {
                 Authorization: Cookie.get("JWT")
             }
@@ -67,7 +67,7 @@ export default class AddProduct extends React.Component {
             <Container maxWidth="sm" style={{paddingTop:'5em'}}>
 
                 <Typography variant='h2'>
-                    Add your product
+                    List your product
                 </Typography>
 
                 <form>
@@ -77,7 +77,7 @@ export default class AddProduct extends React.Component {
                 <TextField id="price" label="Price in 	
                 rupees" variant="outlined" style={{marginTop:'2em', marginRight:'2em', width:'100%'}} onChange={this.handleChange}/>
 
-                <TextField id="picture" label="Prodcut Image Url" variant="outlined" style={{marginTop:'2em', marginRight:'2em', width:'100%'}} onChange={this.handleChange}/>
+                <TextField id="picture" label="Product Image Url" variant="outlined" style={{marginTop:'2em', marginRight:'2em', width:'100%'}} onChange={this.handleChange}/>
 
                 <InputLabel id="product-type" style={{marginTop: '2em', width:'100%'}}>Product Type</InputLabel>
                 <Select
