@@ -47,12 +47,18 @@ export default class NavBar extends React.Component {
                   Profile
                 </NavLink>
               </NavItem> ) : null }
-          {JWT != "null" ? (
-              <NavItem className="navItem">
-                <NavLink active href="/music">
-                  Music
-                </NavLink>
-              </NavItem> ) : null }
+              {JWT != "null" ? (
+                  <NavItem className="navItem">
+                    <NavLink active href="/music">
+                      Music
+                    </NavLink>
+                  </NavItem> ) : null }
+              {JWT != "null" ? (
+                <NavItem className="navItem">
+                  <NavLink active href="/playlist">
+                    Playlist
+                  </NavLink>
+                </NavItem> ) : null }   
               {JWT != "null" ? (
                 <NavItem className="navItem">
                   <NavLink active href="/store">

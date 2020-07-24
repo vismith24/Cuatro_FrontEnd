@@ -12,6 +12,7 @@ import SkipPreviousOutlinedIcon from '@material-ui/icons/SkipPreviousOutlined';
 import PauseOutlinedIcon from '@material-ui/icons/PauseOutlined';
 import PlayArrowOutlinedIcon from '@material-ui/icons/PlayArrowOutlined';
 import AddToPlaylist from './AddToPlaylist'
+import Alert from '../Alert/Alert'
 
 export default class CardProfile extends React.Component {
     constructor(props){
@@ -101,11 +102,13 @@ export default class CardProfile extends React.Component {
     })
     .then(res => {
         console.log('success on adding to playlist', res.data)
+        this.setState({
+          success: true
+        })
     })
     .catch(error => {
         this.setState({
             error: error
-            
         })
     })
   }
@@ -249,6 +252,17 @@ export default class CardProfile extends React.Component {
           ) : null
         }
         
+        {
+          this.state.success ? (
+            <Alert 
+              afterCloseFunction={() => {this.setState({success: false})}}
+              type="success"
+              message="Added to playlist"
+            />
+          ) : null
+        }
+
+
         <div className="card">
           <div className="current-song">
             <audio ref={ref => this.playerRef = ref}>

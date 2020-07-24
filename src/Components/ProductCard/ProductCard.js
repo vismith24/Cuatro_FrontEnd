@@ -18,6 +18,7 @@ import Cookie from 'js-cookie';
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
+    width: '20rem',
     margin: "1em 1em 1em 1em",
     justifyContent: "space-between"
   },
