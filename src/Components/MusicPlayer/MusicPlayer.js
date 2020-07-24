@@ -28,6 +28,12 @@ export default class CardProfile extends React.Component {
   
    componentDidMount() {
     this.getAllPlaylist()
+    if (this.props.playlist){
+      this.setState({
+        musicList: this.props.playlist.songs 
+      })
+    }
+    else {
     fetch(backendAPI + `/music/songs`)
     .then(res => res.json())
     .then(resJson => {
@@ -35,6 +41,7 @@ export default class CardProfile extends React.Component {
         musicList: resJson.musicList
       });
     });
+    }
      this.playerRef.addEventListener("timeupdate", this.timeUpdate, false);
      this.playerRef.addEventListener("ended", this.nextSong, false);
      this.timelineRef.addEventListener("click", this.changeCurrentTime, false);

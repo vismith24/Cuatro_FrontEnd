@@ -88,7 +88,8 @@ export default class Playlist extends React.Component {
     render() {
         const playlistRows = []
         for (var index in this.state.playlists) {
-            playlistRows.push(<PlaylistBar key={index} name={this["state"]["playlists"][index]["name"]}/>)
+            console.log(this.state.playlists);
+            playlistRows.push(<PlaylistBar key={index} name={this["state"]["playlists"][index]["name"]} songs={this.state.playlists[index].songs}/>)
         }
         return (
             <Container maxwidth="sm" style={{paddingTop: '2rem'}}>
