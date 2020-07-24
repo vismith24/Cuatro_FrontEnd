@@ -9,7 +9,8 @@ import ProductCard from "../ProductCard/ProductCard";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
-
+import { backendAPI } from "../../constants";
+import Cookie from 'js-cookie';
 class Search extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +18,10 @@ class Search extends Component {
     // Sets up our initial state
     this.state = {
       error: false,
-      hasMore: true,
+      hasMore: false,
       isLoading: false,
       searchText: this.props.location ? this.props.location.state.searchText : "",
-      users: []
+      result: []
     };
 
     // Binds our scroll event handler
@@ -53,11 +54,83 @@ class Search extends Component {
     //   this.props.location.state.setRedirect(false)
     // }
     // catch(err) {}
-    this.loadUsers();
+    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+    var searchText = this.state.searchText;
+    var body = JSON.stringify({ searchText });
+    console.log(JWT, searchText, body);
+    this.setState({ isLoading: false }, () => {
+      fetch(backendAPI + `/search/store`, {
+        method: "POST",
+            headers: {
+              Authorization: JWT,
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: body
+      }).then(res => res.json())
+      .then(resJson => {
+          this.setState({
+            result: resJson.result
+          })
+      })
+    });
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Loads some users on initial load
+    //console.log('location', nextProps.location)
+    // try {
+    //   this.props.location.state.setRedirect(false)
+    // }
+    // catch(err) {}
+    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+    var searchText = nextProps.location.state.searchText;
+    var body = JSON.stringify({ searchText });
+    this.setState({ isLoading: false }, () => {
+      fetch(backendAPI + `/search/store`, {
+        method: "POST",
+            headers: {
+              Authorization: JWT,
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: body
+      }).then(res => res.json())
+      .then(resJson => {
+          this.setState({
+            result: resJson.result
+          })
+      })
+    });
+  }
+
+  /*
   loadUsers = () => {
+    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+    var searchText = this.state.searchText;
+    var body = { searchText }
+    console.log(JWT, searchText, body);
     this.setState({ isLoading: true }, () => {
+      fetch(backendAPI + `/search/store`, {
+        method: "POST",
+            headers: {
+              Authorization: JWT,
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: body
+      }).then(res => {
+        console.log(res);
+
+      })
+      /*
+      .then(resJson => {
+        console.log(resJson);
+        this.setState({
+          result: resJson.result
+        })
+      })*/
+      /*
       axios
         .get("https://randomuser.me/api/?results=10")
         .then(results => {
@@ -88,10 +161,10 @@ class Search extends Component {
           });
         });
     });
-  };
+  };*/
 
   render() {
-    const { error, hasMore, isLoading, users } = this.state;
+    const { error, hasMore, isLoading, users, result } = this.state;
 
     return (
       <Container>
@@ -101,8 +174,8 @@ class Search extends Component {
           </Typography>
           <Typography variant="h5"> Scroll down to load more!!</Typography>
           <Container maxWidth="md">
-            {users.map((user, index) => (
-              <ProductCard key={index} user={user} />
+            {result.map((item, index) => (
+              <ProductCard key={index} item={item} />
             ))}
           </Container>
           <Divider /> 

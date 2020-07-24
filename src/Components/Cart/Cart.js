@@ -52,9 +52,9 @@ class Cart extends Component {
     // Loads some users on initial load
     console.log('location', this.props.location)
     // try {
-    //   this.props.location.state.setRedirect(false)
-    // }
-    // catch(err) {}
+      // this.props.location.state.setRedirect(false)
+     //}
+     //catch(err) {}
     this.loadStore();
   }
 

@@ -7,15 +7,12 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import DoneIcon from '@material-ui/icons/Done';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import InfoIcon from "@material-ui/icons/Info";
-import EventIcon from '@material-ui/icons/Event';
 import Tooltip from "@material-ui/core/Tooltip";
-import { Calendar, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
 import moment from "moment";
 import { backendAPI } from "../../constants";
 import Cookie from 'js-cookie';
+import PaymentHandler from '../PaymentHandler';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -62,23 +59,8 @@ export default function CartCard(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [myValues, setMyValues] = useState(props.item);
-  const [selectedDate, setSelectedDate ] = useState(moment(new Date()));
   const product = myValues ? myValues.item : {}; 
   const date = moment(myValues ? myValues.date : moment()).format('DD-MM-YYYY');
-
-  const handleMonthChange = (date) => {
-    var today = moment(new Date());
-    if (date._d > today) {
-      setSelectedDate(date);
-    }
-    else {
-      setSelectedDate(today);
-    }
-  }
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  }
 
   const handleCartBuy = (item) => {
     const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
@@ -179,7 +161,7 @@ export default function CartCard(props) {
             <IconButton aria-label="info">
               <InfoIcon />
             </IconButton></HtmlTooltip>
-            <IconButton onClick={() => handleCartBuy(myValues)} aria-label="add">
+            <IconButton onClick={(e) => {handleCartBuy(myValues); PaymentHandler(e); }} aria-label="add">
               <DoneIcon />
             </IconButton>
             <IconButton onClick={() => handleCartRemove(myValues)} aria-label="info">
