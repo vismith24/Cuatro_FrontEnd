@@ -59,6 +59,12 @@ export default class NavBar extends React.Component {
                     Store
                   </NavLink>
                 </NavItem> ) : null }
+                {JWT != "null" ? (
+                <NavItem className="navItem">
+                  <NavLink active href="/cart">
+                    Cart
+                  </NavLink>
+                </NavItem> ) : null }
           {JWT != "null" ? (
             <NavItem className="navItem">
                 <NavLink href="#" onClick={this.logout}>Log out</NavLink>

@@ -5,6 +5,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+import DoneIcon from '@material-ui/icons/Done';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import InfoIcon from "@material-ui/icons/Info";
 import EventIcon from '@material-ui/icons/Event';
@@ -56,10 +58,13 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export default function ProductCard({ item }) {
+export default function CartCard(props) { 
   const classes = useStyles();
   const theme = useTheme();
+  const [myValues, setMyValues] = useState(props.item);
   const [selectedDate, setSelectedDate ] = useState(moment(new Date()));
+  const product = myValues ? myValues.item : {}; 
+  const date = moment(myValues ? myValues.date : moment()).format('DD-MM-YYYY');
 
   const handleMonthChange = (date) => {
     var today = moment(new Date());
@@ -75,12 +80,53 @@ export default function ProductCard({ item }) {
     setSelectedDate(date);
   }
 
-  const handleCartUpdate = (item) => {
-      const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
-      var itemID = item._id; 
+  const handleCartBuy = (item) => {
+    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+      var itemID = item.item._id; 
       var body;
-      if (item.type === 'Studio') {
-        var date = moment(selectedDate).format('YYYY-MM-DD');
+      if (item.item.type === 'Studio') {
+        var date = moment(item.date).format('YYYY-MM-DD');
+        body = JSON.stringify({ itemID, date });
+        console.log(JWT, itemID, date, body);
+        fetch(backendAPI + `/store/rent_studio`, {
+            method: "POST",
+            headers: {
+              Authorization: JWT,
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: body
+          }).then( res => res.json())
+          .then(resJson => {
+            console.log(resJson);
+            setMyValues(null);
+          })
+      }
+      else {
+        body = JSON.stringify({ itemID });
+        console.log(JWT, itemID, body);
+        fetch(backendAPI + `/store/buy_instrument`, {
+            method: "POST",
+            headers: {
+              Authorization: JWT,
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            },
+            body: body
+          }).then( res => res.json())
+          .then(resJson => {
+            console.log(resJson);
+            setMyValues(null);
+          })
+      }
+  }
+
+  const handleCartRemove = (item) => {
+      const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+      var itemID = item.item._id; 
+      var body;
+      if (item.item.type === 'Studio') {
+        var date = moment(item.date).format('YYYY-MM-DD');
         body = JSON.stringify({ itemID, date });
         console.log(JWT, itemID, date, body);
       }
@@ -88,7 +134,7 @@ export default function ProductCard({ item }) {
         body = JSON.stringify({ itemID });
         console.log(JWT, itemID, body);
       }
-      fetch(backendAPI + `/cart/add`, {
+      fetch(backendAPI + `/cart/remove`, {
         method: "POST",
         headers: {
           Authorization: JWT,
@@ -99,48 +145,54 @@ export default function ProductCard({ item }) {
       }).then( res => res.json())
       .then(resJson => {
         console.log(resJson);
+        setMyValues(null);
       })
   }
 
   return (
     <div className={classes.rootParent}>
+      {myValues ? (
       <Card className={classes.root}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h6" variant="h6">
-              Item: {item.product}
+              Item: {product.product}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              Price: ₹{item.price}
+              Price: ₹{product.price}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton onClick={() => handleCartUpdate(item)} aria-label="add">
-              <AddShoppingCartIcon />
-            </IconButton>
-            <HtmlTooltip title={<React.Fragment><Typography variant="caption" color="textSecondary">
-              {item.type}<br />
+          <HtmlTooltip title={<React.Fragment><Typography variant="caption" color="textSecondary">
+              {product.type}<br />
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
-              Description: {item.description}
-            </Typography></React.Fragment>}>
+              Description: {product.description}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              Seller: {product.poster}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              Date: {date}
+            </Typography>
+            </React.Fragment>}>
             <IconButton aria-label="info">
               <InfoIcon />
             </IconButton></HtmlTooltip>
-            {item.type === 'Studio' ? (<HtmlTooltip leaveDelay={500} interactive title={<React.Fragment><MuiPickersUtilsProvider utils={MomentUtils}>
-      <Calendar date={selectedDate} onMonthChange={handleMonthChange} disablePast autoOk onChange={handleDateChange} format='yyyy/MM/DD' />
-    </MuiPickersUtilsProvider></React.Fragment>}>
-            <IconButton aria-label="info">
-              <EventIcon />
-            </IconButton></HtmlTooltip>) : null}
+            <IconButton onClick={() => handleCartBuy(myValues)} aria-label="add">
+              <DoneIcon />
+            </IconButton>
+            <IconButton onClick={() => handleCartRemove(myValues)} aria-label="info">
+              <RemoveCircleOutlineIcon />
+            </IconButton>
           </div>
         </div>
         <CardMedia
           className={classes.cover}
-          image={item.picture}
-          title={item.product}
+          image={product.picture}
+          title={product.product}
         />
-      </Card>
+      </Card>) : null}
     </div>
   );
 }
