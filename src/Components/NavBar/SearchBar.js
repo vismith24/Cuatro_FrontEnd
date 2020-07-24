@@ -59,10 +59,11 @@ export default function SearchBar() {
   }
   const [query, setQuery] = useState("")
   const [redirect, setRedirect] = useState(false)
+
   const keyPress = (event) => {
     if (event.keyCode == 13) {
-      console.log("query", query)
-      setRedirect(true)
+      console.log("query", query);
+      setRedirect(true);
     }
   }
   return (
@@ -72,9 +73,9 @@ export default function SearchBar() {
             pathname: "/search",
             state: { 
               searchText: query,
-            }
+            } 
           }}/>
-        ): null}
+        ): null }
         <div className={classes.search}>
             <div className={classes.searchIcon}>
                 <IconButton type="submit" aria-label="search" onClick={search}>
