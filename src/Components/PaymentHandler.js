@@ -1,8 +1,7 @@
 import Axios from 'axios'
 import Cookie from 'js-cookie';
 
-const paymentHandler = async (e) => {
-    var amount = 500;
+const paymentHandler = async (e, amount) => {
     var body = JSON.stringify({ amount: amount });
     const API_URL = 'http://localhost:8000/';
     e.preventDefault();

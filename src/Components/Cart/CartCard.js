@@ -161,7 +161,7 @@ export default function CartCard(props) {
             <IconButton aria-label="info">
               <InfoIcon />
             </IconButton></HtmlTooltip>
-            <IconButton onClick={(e) => {handleCartBuy(myValues); PaymentHandler(e); }} aria-label="add">
+            <IconButton onClick={(e) => {handleCartBuy(myValues); PaymentHandler(e, product.price); }} aria-label="add">
               <DoneIcon />
             </IconButton>
             <IconButton onClick={() => handleCartRemove(myValues)} aria-label="info">

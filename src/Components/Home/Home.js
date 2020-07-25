@@ -42,7 +42,7 @@ export default class Home extends React.Component {
           />
           <h4>Email: {this.state.email}</h4>
           <h4>Username: {this.state.username}</h4>
-          <Button outline pill onClick={PaymentHandler}>Subscribe to CUATRO</Button>
+          <Button outline pill onClick={(e) => PaymentHandler(e, 750)}>Subscribe to CUATRO</Button>
         </center>
       </React.Fragment>
     );
