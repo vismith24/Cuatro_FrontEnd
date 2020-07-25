@@ -63,7 +63,7 @@ export default class App extends React.Component {
                 <Search />
             </PrivateRoute>
             <PrivateRoute path="/home">
-              <Home />
+              <MusicPlayer />
             </PrivateRoute>
             <PrivateRoute path="/playlist">
               <Playlist />

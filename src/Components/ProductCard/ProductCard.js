@@ -121,7 +121,7 @@ export default function ProductCard({ item }) {
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h6" variant="h6">
-              Item: {item.product}
+              {item.product}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
               Price: ₹{item.price}
