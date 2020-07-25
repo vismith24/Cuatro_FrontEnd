@@ -97,7 +97,6 @@ class Store extends Component {
           <Typography variant="h2">
             Instruments
           </Typography>
-          <Typography variant="h5"> Scroll down to load more!!</Typography>
           <Container maxWidth="md">
             {instruments.map((instrument, index) => (
               <ProductCard key={index} item={instrument} />
@@ -112,13 +111,11 @@ class Store extends Component {
               </center>              
             </div>
           )}
-          {!hasMore && <div>You did it! You reached the end!</div>}
         </div>
         <div>
           <Typography variant="h2">
             Studios
           </Typography>
-          <Typography variant="h5"> Scroll down to load more!!</Typography>
           <Container maxWidth="md">
             {studios.map((studio, index) => (
               <ProductCard key={index} item={studio} />
@@ -133,7 +130,6 @@ class Store extends Component {
               </center>              
             </div>
           )}
-          {!hasMore && <div>You did it! You reached the end!</div>}
         </div>
       </Container>
     );

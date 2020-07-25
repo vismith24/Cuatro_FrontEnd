@@ -69,7 +69,6 @@ class Cart extends Component {
           })
         .then(res => res.json())
         .then(resJson => {
-            console.log(resJson);
           this.setState({
             cart: resJson.cart
           });
@@ -87,7 +86,6 @@ class Cart extends Component {
           <Typography variant="h2">
             Your Cart
           </Typography>
-          <Typography variant="h5"> Scroll down to load more!!</Typography>
           <Container maxWidth="md">
             {cart.map((item, index) => (
               <CartCard key={item} item={item} />
@@ -102,7 +100,6 @@ class Cart extends Component {
               </center>              
             </div>
           )}
-          {!hasMore && <div>You did it! You reached the end!</div>}
         </div>
       </Container>
     );

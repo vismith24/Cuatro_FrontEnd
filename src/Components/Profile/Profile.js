@@ -6,6 +6,7 @@ import PaymentHandler from '../PaymentHandler';
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import ProductCard from "../ProductCard/ProductCard";
+import ProfileProduct from './ProfileProduct';
 import LinearProgress from "@material-ui/core/LinearProgress";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
@@ -61,7 +62,7 @@ export default class Profile extends React.Component {
           </Typography>
             <Container maxWidth="md">
             {user.itemsPosted.map((item, index) => (
-              <ProductCard key={index} item={item} />
+              <ProfileProduct key={index} item={item} />
             ))}
             </Container>
           <Divider /> 
@@ -80,7 +81,7 @@ export default class Profile extends React.Component {
           </Typography>
             <Container maxWidth="md">
             {user.studiosRented.map((item, index) => (
-              <ProductCard key={index} item={item.studio} />
+              <ProfileProduct key={index} item={item.studio} />
             ))}
             </Container>
           <Divider /> 
@@ -99,7 +100,7 @@ export default class Profile extends React.Component {
           </Typography>
             <Container maxWidth="md">
             {user.instrumentsBought.map((item, index) => (
-              <ProductCard key={index} item={item.instrument} />
+              <ProfileProduct key={index} item={item.instrument} />
             ))}
             </Container>
           <Divider /> 

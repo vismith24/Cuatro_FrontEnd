@@ -58,65 +58,14 @@ const HtmlTooltip = withStyles((theme) => ({
   },
 }))(Tooltip);
 
-export default function ProductCard({ item }) {
+export default function ProfileProduct({ item }) {
   const classes = useStyles();
   const theme = useTheme();
   const [selectedDate, setSelectedDate ] = useState(moment(new Date()));
   const [success, setSuccess ] = useState(false);
 
-  const handleMonthChange = (date) => {
-    var today = moment(new Date());
-    if (date._d > today) {
-      setSelectedDate(date);
-    }
-    else {
-      setSelectedDate(today);
-    }
-  }
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  }
-
-  const handleCartUpdate = (item) => {
-      const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
-      var itemID = item._id; 
-      var body;
-      if (item.type === 'Studio') {
-        var date = moment(selectedDate).format('YYYY-MM-DD');
-        body = JSON.stringify({ itemID, date });
-        console.log(JWT, itemID, date, body);
-      }
-      else {
-        body = JSON.stringify({ itemID });
-        console.log(JWT, itemID, body);
-      }
-      fetch(backendAPI + `/cart/add`, {
-        method: "POST",
-        headers: {
-          Authorization: JWT,
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: body
-      }).then( res => res.json())
-      .then(resJson => {
-        setSuccess(true);
-        console.log(resJson);
-      })
-  }
-
   return (
     <div className={classes.rootParent}>
-      {
-            success ? (
-              <Alert 
-                afterCloseFunction={() => setSuccess(false)}
-                type="success"
-                message="Item added to cart"
-              />
-            ) : null
-          }
       <Card className={classes.root}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
@@ -128,24 +77,16 @@ export default function ProductCard({ item }) {
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton onClick={() => handleCartUpdate(item)} aria-label="add">
-              <AddShoppingCartIcon />
-            </IconButton>
             <HtmlTooltip title={<React.Fragment><Typography variant="caption" color="textSecondary">
               {item.type}<br />
             </Typography>
             <Typography variant="subtitle2" color="textSecondary">
               Description: {item.description}
-            </Typography></React.Fragment>}>
+            </Typography>
+            </React.Fragment>}>
             <IconButton aria-label="info">
               <InfoIcon />
             </IconButton></HtmlTooltip>
-            {item.type === 'Studio' ? (<HtmlTooltip leaveDelay={500} interactive title={<React.Fragment><MuiPickersUtilsProvider utils={MomentUtils}>
-      <Calendar date={selectedDate} onMonthChange={handleMonthChange} disablePast autoOk onChange={handleDateChange} format='yyyy/MM/DD' />
-    </MuiPickersUtilsProvider></React.Fragment>}>
-            <IconButton aria-label="info">
-              <EventIcon />
-            </IconButton></HtmlTooltip>) : null}
           </div>
         </div>
         <CardMedia

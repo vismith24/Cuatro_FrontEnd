@@ -12,7 +12,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import moment from "moment";
 import { backendAPI } from "../../constants";
 import Cookie from 'js-cookie';
-import PaymentHandler from '../PaymentHandler';
+import Alert from '../Alert/Alert';
+import Axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,15 +62,41 @@ export default function CartCard(props) {
   const [myValues, setMyValues] = useState(props.item);
   const product = myValues ? myValues.item : {}; 
   const date = moment(myValues ? myValues.date : moment()).format('DD-MM-YYYY');
+  const [success, setSuccess ] = useState(0);
+  var message = "";
 
-  const handleCartBuy = (item) => {
-    const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
+  const handleCartBuy = (e, item, amount) => {
+    var body = JSON.stringify({ amount: amount });
+    const API_URL = 'http://localhost:8000/';
+    e.preventDefault();
+    const orderUrl = `${API_URL}order`;
+    fetch(`${API_URL}order`, {
+      method: "POST",
+      headers: {
+        Authorization: Cookie.get("JWT") ? Cookie.get("JWT"): "null",
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: body
+    }).then(res => res.json())
+    .then(resJson => {
+    const options = {
+      key: process.env.RAZOR_PAY_TEST_KEY,
+      name: "Cuatro",
+      description: "Payment for purchase",
+      "image": require('../../images/cuatro-logo.png'),
+      order_id: resJson.id,
+      handler: async (response) => {
+        try {
+         const paymentId = response.razorpay_payment_id;
+         const url = `${orderUrl}/capture/${paymentId}`;
+         const captureResponse = await Axios.post(url, {amount: amount});
+         const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
       var itemID = item.item._id; 
       var body;
       if (item.item.type === 'Studio') {
         var date = moment(item.date).format('YYYY-MM-DD');
         body = JSON.stringify({ itemID, date });
-        console.log(JWT, itemID, date, body);
         fetch(backendAPI + `/store/rent_studio`, {
             method: "POST",
             headers: {
@@ -80,13 +107,12 @@ export default function CartCard(props) {
             body: body
           }).then( res => res.json())
           .then(resJson => {
-            console.log(resJson);
+            setSuccess(2);
             setMyValues(null);
           })
       }
       else {
         body = JSON.stringify({ itemID });
-        console.log(JWT, itemID, body);
         fetch(backendAPI + `/store/buy_instrument`, {
             method: "POST",
             headers: {
@@ -97,10 +123,22 @@ export default function CartCard(props) {
             body: body
           }).then( res => res.json())
           .then(resJson => {
-            console.log(resJson);
+            setSuccess(1);
             setMyValues(null);
           })
       }
+         console.log(captureResponse.data);
+        } catch (err) {
+          console.log(err);
+        }
+      },  theme: {
+        color: "#686CFD",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();
+    })
+    
   }
 
   const handleCartRemove = (item) => {
@@ -110,11 +148,9 @@ export default function CartCard(props) {
       if (item.item.type === 'Studio') {
         var date = moment(item.date).format('YYYY-MM-DD');
         body = JSON.stringify({ itemID, date });
-        console.log(JWT, itemID, date, body);
       }
       else {
         body = JSON.stringify({ itemID });
-        console.log(JWT, itemID, body);
       }
       fetch(backendAPI + `/cart/remove`, {
         method: "POST",
@@ -126,13 +162,35 @@ export default function CartCard(props) {
         body: body
       }).then( res => res.json())
       .then(resJson => {
-        console.log(resJson);
+        setSuccess(3);
         setMyValues(null);
       })
   }
 
+  if (success === 1) {
+    message = "Instrument bought successfully";
+  }
+  else if (success === 2) {
+    message = "Studio Rented Successfully";
+  }
+  else if (success === 3) {
+    message = "Item removed from cart successfully";
+  }
+  else {
+    message = "";
+  }
+
   return (
     <div className={classes.rootParent}>
+      {
+            success === 0 ? null : (
+              <Alert 
+                afterCloseFunction={() => setSuccess(0)}
+                type="success"
+                message={message}
+              />
+            )
+          }
       {myValues ? (
       <Card className={classes.root}>
         <div className={classes.details}>
@@ -161,7 +219,7 @@ export default function CartCard(props) {
             <IconButton aria-label="info">
               <InfoIcon />
             </IconButton></HtmlTooltip>
-            <IconButton onClick={(e) => {handleCartBuy(myValues); PaymentHandler(e, product.price); }} aria-label="add">
+            <IconButton onClick={(e) => handleCartBuy(e, myValues, product.price) } aria-label="add">
               <DoneIcon />
             </IconButton>
             <IconButton onClick={() => handleCartRemove(myValues)} aria-label="info">

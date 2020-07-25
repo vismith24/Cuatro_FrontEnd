@@ -170,9 +170,8 @@ class Search extends Component {
       <Container>
         <div>
           <Typography variant="h2">
-            Infinite Music!
+            Search Store Results
           </Typography>
-          <Typography variant="h5"> Scroll down to load more!!</Typography>
           <Container maxWidth="md">
             {result.map((item, index) => (
               <ProductCard key={index} item={item} />
@@ -187,7 +186,6 @@ class Search extends Component {
               </center>              
             </div>
           )}
-          {!hasMore && <div>You did it! You reached the end!</div>}
         </div>
       </Container>
     );
