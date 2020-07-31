@@ -21,7 +21,7 @@ const paymentHandler = async (e, amount) => {
       key: process.env.RAZOR_PAY_TEST_KEY,
       name: "Cuatro",
       description: "Payment for purchase",
-      "image": require('../images/cuatro-logo.png'),
+      "image": require('../images/cuatro-final.png'),
       order_id: resJson.id,
       handler: async (response) => {
         try {
