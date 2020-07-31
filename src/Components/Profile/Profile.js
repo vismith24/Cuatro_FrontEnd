@@ -114,7 +114,7 @@ export default class Profile extends React.Component {
           )}
           </div>
           <br />
-          <Button outline pill onClick={PaymentHandler}>Subscribe to CUATRO</Button>
+          <Button outline pill onClick={(e) => PaymentHandler(e, 1500)}>Subscribe to CUATRO</Button>
           </center>
       </React.Fragment>
     );

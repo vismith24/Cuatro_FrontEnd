@@ -91,6 +91,7 @@ export default function CartCard(props) {
          const paymentId = response.razorpay_payment_id;
          const url = `${orderUrl}/capture/${paymentId}`;
          const captureResponse = await Axios.post(url, {amount: amount});
+         console.log(captureResponse.data);
          const JWT = Cookie.get("JWT") ? Cookie.get("JWT") : "null";
       var itemID = item.item._id; 
       var body;
@@ -127,9 +128,8 @@ export default function CartCard(props) {
             setMyValues(null);
           })
       }
-         console.log(captureResponse.data);
         } catch (err) {
-          console.log(err);
+          console.log("Handler Error: ", err);
         }
       },  theme: {
         color: "#686CFD",
@@ -138,7 +138,6 @@ export default function CartCard(props) {
     const rzp1 = new window.Razorpay(options);
     rzp1.open();
     })
-    
   }
 
   const handleCartRemove = (item) => {
